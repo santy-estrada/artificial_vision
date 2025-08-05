@@ -2,7 +2,7 @@ import os
 import shutil
 
 # Ruta de origen con los .jpg y .txt
-source_folder = r"D:\SumClasses\ArtVi\DeepLearning\g2\output_labeled"
+source_folder = r"D:\SumClasses\ArtVi\DeepLearning\g2\output_labeled_aug"
 
 # Base directory donde crear la estructura train
 base_dir = r"D:\SumClasses\ArtVi\DeepLearning\g2"
