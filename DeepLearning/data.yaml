@@ -1,0 +1,7 @@
+path: D:\SumClasses\ArtVi\DeepLearning\g2
+train: train
+val: test
+nc: 2
+names:
+  0: "C"
+  1: "T"

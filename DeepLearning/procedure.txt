@@ -1,0 +1,14 @@
+1. Label all pictures
+2. pip install pytorch (desde web)
+3. pip install ultralytics
+4. run extract_image_json.py
+5. pip install albumentations
+6. run data_augmentation.py
+7. run convertToYolo.py --> Adapt the file to your needs (this must be done twice: output_labeled and output_labeled_aug)
+8. run extractImageTxt.py --> use output_labeled_aug for test and output_labeled for train
+9. organize data.yaml with path for pictures and amount of classes
+10. run yolo task=detect mode=train model=yolo11n.pt data=[path]\data.yaml epochs=100 imgsz=320
+11. move best.pt to the folder where all the .py are
+12. run predictYolo.py with different images on the path
+
+Note: You might need to pip uninstall opencv-python and install it again
