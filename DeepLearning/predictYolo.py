@@ -2,7 +2,7 @@ from ultralytics import YOLO
 import cv2
 
 # Cargar el modelo YOLO entrenado
-model = YOLO("best.pt")  # Asegúrate de que el modelo esté en el mismo directorio o da la ruta completa
+model = YOLO("bestProfe.pt")  # Asegúrate de que el modelo esté en el mismo directorio o da la ruta completa
 
 # Ruta de la imagen que deseas predecir
 image_path = r"D:\SumClasses\ArtVi\DeepLearning\g2\test\images\07-31-07_002_2_scale_2.5_aug_20250803_205344.jpg"  # Cambia esto por tu imagen
