@@ -12,7 +12,7 @@ worksheet = workbook.add_worksheet('caracts')
 vector_caracts = np.array([])
 
 def binarizeImg(imgGray):
-    return cv2.inRange(imgGray, 10, 110)
+    return cv2.inRange(imgGray, 30, 200)
 
 def extract_contours(imgBinary):
     cnt = []
@@ -40,13 +40,29 @@ def extractPatterns(imgRoiBin, cnt):
     x10_hu7 = Hu[6][0]
     
     
-    # Divide the image into 4x6 grid of 10x10 ROIs
+    # Divide the image into grid for ROI analysis (adjust grid size for new dimensions)
     roi_features = []
-    for i in range(6):  # rows
-        for j in range(4):  # columns
-            roi = imgRoiBin[i*10:(i+1)*10, j*10:(j+1)*10]
-            count_bin = cv2.countNonZero(roi) / 100  # normalize
-            roi_features.append(count_bin)
+    height, width = imgRoiBin.shape
+    grid_rows = 8  # Increased from 6 for 80 pixel height
+    grid_cols = 6  # Increased from 4 for 60 pixel width
+    
+    row_step = height // grid_rows
+    col_step = width // grid_cols
+    
+    for i in range(grid_rows):
+        for j in range(grid_cols):
+            start_row = i * row_step
+            end_row = min((i + 1) * row_step, height)
+            start_col = j * col_step
+            end_col = min((j + 1) * col_step, width)
+            
+            roi = imgRoiBin[start_row:end_row, start_col:end_col]
+            roi_area = roi.shape[0] * roi.shape[1]
+            if roi_area > 0:
+                count_bin = cv2.countNonZero(roi) / roi_area  # normalize by actual ROI area
+                roi_features.append(count_bin)
+            else:
+                roi_features.append(0.0)
 
     list_car = [x1_area, x2_perimeter, x3_circularity, x4_hu1, x5_hu2, x6_hu3, x7_hu4, x8_hu5, x9_hu6, x10_hu7] + roi_features
     
@@ -72,7 +88,11 @@ def extract_caracts():
                 cv2.waitKey(1)
                 imgRoiBin = imgBinary[y:y+h, x:x+w]
                 imgRoiBin = cv2.copyMakeBorder(imgRoiBin, 2, 2, 2, 2, cv2.BORDER_CONSTANT, value=0)
-                # imgRoiBin = cv2.resize(imgRoiBin, (40, 60))   #This attempts to standardize the size of the character images keeping aspect ratio
+                
+                # Standardize size for consistent feature extraction (especially important for rotated images)
+                # Use larger size than numbers since teeth are more complex shapes
+                imgRoiBin = cv2.resize(imgRoiBin, (60, 80))  # Width x Height - larger than 40x60 for teeth
+                
                 cv2.imshow('imgRoiBin', imgRoiBin)
                 cv2.waitKey(1)
                 vector_caracts = extractPatterns(imgRoiBin, cnt)
